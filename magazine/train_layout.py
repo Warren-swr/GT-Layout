@@ -138,7 +138,7 @@ def train(conf):
     for epoch in range(conf.epochs):
         if not conf.no_console_log:
             print(f'training run {conf.exp_name}')
-            print(f'data path {conf.data_path}')
+            # print(f'data path {conf.data_path}')
             flog.write(f'training run {conf.exp_name}\n')
             # print(header)
             flog.write(header+'\n')
