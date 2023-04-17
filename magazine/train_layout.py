@@ -217,7 +217,7 @@ def train(conf):
                         log_console=log_console, log_tb=not conf.no_tb_log, tb_writer=valdt_writer,
                         lr=encoder_opt.param_groups[0]['lr'], flog=flog)
             
-            train_batches.set_description(f"epoch {epoch+1} : box {losses['box'].item():.3f}. le {losses['leaf'].item():5.3f} ex {losses['exists'].item():5.3f}. sem {losses['semantic'].item():5.3f} kl {losses['kldiv'].item():5.3f} T {total_loss.item():5.3f}")
+            train_batches.set_description(f"epoch {epoch+1} : box {losses['box'].item():5.3f} le {losses['leaf'].item():5.3f} ex {losses['exists'].item():5.3f} sem {losses['semantic'].item():5.3f} kl {losses['kldiv'].item():5.3f} T {total_loss.item():5.3f}")
 
     # save the final models
     print("Saving final checkpoint ...... ", end='', flush=True)
