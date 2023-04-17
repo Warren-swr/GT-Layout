@@ -229,7 +229,7 @@ class BoxDecoder(nn.Module):
         self.size = nn.Linear(hidden_size, 2)
     
     def forward(self, input_feature):
-        xy = torch.sigmoid(self.xy(input_feature))/2
+        xy = torch.sigmoid(self.xy(input_feature))
         size = torch.sigmoid(self.size(input_feature))
         return torch.cat([xy, size], dim=1)
 
