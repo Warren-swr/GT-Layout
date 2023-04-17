@@ -295,11 +295,10 @@ def forward(batch, data_features, encoder, decoder, device, conf,
     for loss_name in losses.keys():
         losses[loss_name] = losses[loss_name] / len(objects)
 
-    loss_weight_kldiv = conf.loss_weight_kldiv
-    # if epoch >= 200:
-    #     loss_weight_kldiv = conf.loss_weight_kldiv + 0.05 * (epoch - 200)
-    # if loss_weight_kldiv > 5.0:
-    #     loss_weight_kldiv = 5.0
+    if epoch <= 50:
+        loss_weight_kldiv = conf.loss_weight_kldiv * (float(epoch) / 50.0)
+    else:
+        loss_weight_kldiv = conf.loss_weight_kldiv
 
     losses['box'] *= conf.loss_weight_box
     losses['leaf'] *= conf.loss_weight_leaf
