@@ -217,7 +217,7 @@ def train(conf):
                         log_console=log_console, log_tb=not conf.no_tb_log, tb_writer=valdt_writer,
                         lr=encoder_opt.param_groups[0]['lr'], flog=flog)
             
-            train_batches.set_description(f"epoch {epoch+1} : box {losses['box'].item():5.3f} le {losses['leaf'].item():5.3f} ex {losses['exists'].item():5.3f} sem {losses['semantic'].item():5.3f} kl {losses['kldiv'].item():5.3f} T {total_loss.item():5.3f}")
+            train_batches.set_description(f"epoch{epoch+1} : box{losses['box'].item():5.3f} le{losses['leaf'].item():5.3f} ex{losses['exists'].item():5.3f} sem{losses['semantic'].item():5.3f} kl{losses['kldiv'].item():5.3f} T{total_loss.item():5.3f}")
 
     # save the final models
     print("Saving final checkpoint ...... ", end='', flush=True)
@@ -358,11 +358,11 @@ if __name__ == '__main__':
     sys.setrecursionlimit(5000) # this code uses recursion a lot for code simplicity
 
     parser = ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='./logs/magazine_2K_256', help='name of the training run')
+    parser.add_argument('--exp_name', type=str, default='./logs/magazine_2.5K_test_2', help='name of the training run')
     parser.add_argument('--category', type=str, default='magazine', help='object category')
     parser.add_argument('--device', type=str, default='cuda:1', help='cpu or cuda:x for using cuda on GPU number x')
     parser.add_argument('--seed', type=int, default=3124256514, help='random seed (for reproducibility)')
-    parser.add_argument('--data_path', type=str, default='/home/weiran/Project/RvNN-Layout/data/magazine-ours/magazine_0330_2k_output/')
+    parser.add_argument('--data_path', type=str, default='/home/weiran/Projects/RvNN-Layout/data/magazine-ours/magazine_0417_2.5K/')
     parser.add_argument('--train_dataset', type=str, default='train.txt', help='file name for the list of object names for training')
     parser.add_argument('--val_dataset', type=str, default='val.txt', help='file name for the list of object names for validation')
     parser.add_argument('--pretrained_model', type=str, default=None)
@@ -374,7 +374,7 @@ if __name__ == '__main__':
     parser.add_argument('--max_child_num', type=int, default=5, help='maximum number of children per parent')
 
     # training parameters
-    parser.add_argument('--epochs', type=int, default=300)
+    parser.add_argument('--epochs', type=int, default=500)
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=.001)
     parser.add_argument('--weight_decay', type=float, default=1e-6)
@@ -383,7 +383,7 @@ if __name__ == '__main__':
     parser.add_argument('--non_variational', action='store_true', default=False, help='make the variational autoencoder non-variational')
 
     # loss weights
-    parser.add_argument('--loss_weight_kldiv', type=float, default=0.5, help='weight for the kl divergence loss')
+    parser.add_argument('--loss_weight_kldiv', type=float, default=0.2, help='weight for the kl divergence loss')
     parser.add_argument('--loss_weight_box', type=float, default=10.0, help='weight for the box reconstruction loss')
     parser.add_argument('--loss_weight_leaf', type=float, default=5.0, help='weight for the "node is leaf" reconstruction loss')
     parser.add_argument('--loss_weight_exists', type=float, default=5.0, help='weight for the "node exists" reconstruction loss')

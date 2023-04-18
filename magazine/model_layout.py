@@ -9,6 +9,8 @@ from torch import nn
 from data_layout import Tree
 from utils import load_pts
 
+VAE_adjust = True
+
 
 #########################################################################################
 ## Encoder
@@ -20,12 +22,20 @@ class Sampler(nn.Module):
     def __init__(self, feature_size, hidden_size, probabilistic=True):
         super(Sampler, self).__init__()
         self.probabilistic = probabilistic
-
+        
+        if VAE_adjust:
+            print("add layer norm and a layer")
+            self.mlp_pre = nn.Linear(feature_size, hidden_size)
+            self.ln = nn.LayerNorm(hidden_size)
+            
         self.mlp1 = nn.Linear(feature_size, hidden_size)
         self.mlp2mu = nn.Linear(hidden_size, feature_size)
         self.mlp2var = nn.Linear(hidden_size, feature_size)
 
     def forward(self, x):
+        if VAE_adjust:
+            x = x + self.mlp_pre(self.ln(x))
+        
         encode = torch.relu(self.mlp1(x))
         mu = self.mlp2mu(encode)
 
@@ -204,10 +214,15 @@ class SampleDecoder(nn.Module):
         super(SampleDecoder, self).__init__()
         self.mlp1 = nn.Linear(feature_size, hidden_size)
         self.mlp2 = nn.Linear(hidden_size, feature_size)
+        '''KL loss 偏高'''
+        if VAE_adjust:
+            self.mlp3 = nn.Linear(hidden_size, feature_size)
 
     def forward(self, input_feature):
         output = torch.relu(self.mlp1(input_feature))
         output = torch.relu(self.mlp2(output))
+        if VAE_adjust:
+            output = torch.relu(self.mlp3(output))
         return output
 
 
