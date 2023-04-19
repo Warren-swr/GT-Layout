@@ -9,7 +9,7 @@ from torch import nn
 from data_layout import Tree
 from utils import load_pts
 
-VAE_adjust = True
+VAE_adjust = False
 
 
 #########################################################################################
@@ -97,10 +97,13 @@ class BranchEncoder(nn.Module):
         self.node_op = nn.Linear(max_child_num*hidden_size, hidden_size)
         # self.arrange_op = nn.Linear(arrange_size, hidden_size)
         self.parent_op = nn.Linear(hidden_size*2, feature_size)
+        self.pos_emb = nn.Parameter(torch.zeros(1, 5, hidden_size))
 
     def forward(self, child_feats, child_exists, box_vector):
         # use the child_op linear layer to extract per-child features
         # child_feats = torch.relu(self.child_op(child_feats))
+
+        child_feats = child_feats + self.pos_emb[:, :child_feats.size(1), :]
 
         # zero non-existent children
         child_feats = child_feats * child_exists
@@ -275,6 +278,7 @@ class BranchDecoder(nn.Module):
         self.mlp_arrange = nn.Linear(hidden_size, max_child_num*4)
         self.mlp_sem = nn.Linear(hidden_size, Tree.num_sem)
         self.mlp_child = nn.Linear(hidden_size, feature_size)
+        self.pos_emb = nn.Parameter(torch.zeros(1, 5, hidden_size))
 
     def forward(self, parent_feature):
         batch_size = parent_feature.shape[0]
@@ -285,6 +289,7 @@ class BranchDecoder(nn.Module):
         # parent_feature = torch.relu(self.mlp_parent_2(parent_feature))
 
         child_feats = parent_feature.view(batch_size, self.max_child_num, self.hidden_size)
+        child_feats = child_feats + self.pos_emb[:, :child_feats.size(1), :]
 
         # use the mlp_exists linear layer to predict children node existence (output logits, i.e. no sigmoid)
         child_exists_logits = self.mlp_exists(child_feats.view(batch_size*self.max_child_num, self.hidden_size))

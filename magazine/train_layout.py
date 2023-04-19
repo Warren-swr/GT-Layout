@@ -358,7 +358,7 @@ if __name__ == '__main__':
     sys.setrecursionlimit(5000) # this code uses recursion a lot for code simplicity
 
     parser = ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='./logs/magazine_2.5K_test_2', help='name of the training run')
+    parser.add_argument('--exp_name', type=str, default='./logs/magazine_2.5K_test_emb', help='name of the training run')
     parser.add_argument('--category', type=str, default='magazine', help='object category')
     parser.add_argument('--device', type=str, default='cuda:1', help='cpu or cuda:x for using cuda on GPU number x')
     parser.add_argument('--seed', type=int, default=3124256514, help='random seed (for reproducibility)')
