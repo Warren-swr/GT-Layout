@@ -358,11 +358,14 @@ if __name__ == '__main__':
     sys.setrecursionlimit(5000) # this code uses recursion a lot for code simplicity
 
     parser = ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='./logs/magazine_0.3K', help='name of the training run')
+    
+    exp = 'publay-2W'
+    
+    parser.add_argument('--exp_name', type=str, default='./logs/' + exp, help='name of the training run')
     parser.add_argument('--category', type=str, default='magazine', help='object category')
     parser.add_argument('--device', type=str, default='cuda:1', help='cpu or cuda:x for using cuda on GPU number x')
     parser.add_argument('--seed', type=int, default=3124256514, help='random seed (for reproducibility)')
-    parser.add_argument('--data_path', type=str, default='/home/weiran/Projects/RvNN-Layout/data/magazine-ours/magazine_0417_0.3K/')
+    parser.add_argument('--data_path', type=str, default='/home/weiran/Projects/RvNN-Layout/data/publay-ours/' + exp)
     parser.add_argument('--train_dataset', type=str, default='train.txt', help='file name for the list of object names for training')
     parser.add_argument('--val_dataset', type=str, default='val.txt', help='file name for the list of object names for validation')
     parser.add_argument('--pretrained_model', type=str, default=None)
@@ -374,12 +377,12 @@ if __name__ == '__main__':
     parser.add_argument('--max_child_num', type=int, default=5, help='maximum number of children per parent')
 
     # training parameters
-    parser.add_argument('--epochs', type=int, default=800)
+    parser.add_argument('--epochs', type=int, default=200)
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=.001)
     parser.add_argument('--weight_decay', type=float, default=1e-6)
     parser.add_argument('--lr_decay_by', type=float, default=0.9)
-    parser.add_argument('--lr_decay_every', type=float, default=1000)
+    parser.add_argument('--lr_decay_every', type=float, default=1500)
     parser.add_argument('--non_variational', action='store_true', default=False, help='make the variational autoencoder non-variational')
 
     # loss weights

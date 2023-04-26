@@ -1,0 +1,9 @@
+1 vertical_branch 73 0 0
+2 horizontal_branch 166 255 0
+3 stack_branch 255 0 0
+4 image 113 201 254
+5 text 241 126 0
+6 none 200 200 200
+7 title 255 73 56
+8 table 45 131 159
+9 list 45 131 199

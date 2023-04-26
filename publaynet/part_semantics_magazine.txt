@@ -1,0 +1,9 @@
+1 vertical_branch subcomponents
+2 horizontal_branch subcomponents
+3 stack_branch subcomponents
+4 image leaf
+5 text leaf
+6 none leaf
+7 title leaf
+8 table leaf
+9 list leaf
