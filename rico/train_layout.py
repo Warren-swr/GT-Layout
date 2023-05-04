@@ -357,7 +357,7 @@ def forward(batch, data_features, encoder, decoder, device, conf,
 if __name__ == '__main__':
     sys.setrecursionlimit(5000) # this code uses recursion a lot for code simplicity
     
-    exp = 'rico-0.3K'
+    exp = 'rico-1W'
 
     parser = ArgumentParser()
     parser.add_argument('--exp_name', type=str, default='./logs/' + exp, help='name of the training run')
@@ -370,13 +370,13 @@ if __name__ == '__main__':
     parser.add_argument('--pretrained_model', type=str, default=None)
 
     # model hyperparameters
-    parser.add_argument('--feature_size', type=int, default=256)
-    parser.add_argument('--hidden_size', type=int, default=256)
+    parser.add_argument('--feature_size', type=int, default=512)
+    parser.add_argument('--hidden_size', type=int, default=512)
     parser.add_argument('--max_tree_depth', type=int, default=8, help='maximum depth of generated object trees')
     parser.add_argument('--max_child_num', type=int, default=5, help='maximum number of children per parent')
 
     # training parameters
-    parser.add_argument('--epochs', type=int, default=500)
+    parser.add_argument('--epochs', type=int, default=400)
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=.001)
     parser.add_argument('--weight_decay', type=float, default=1e-6)

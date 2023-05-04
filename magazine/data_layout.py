@@ -306,31 +306,31 @@ class Tree(object):
             return self
         
         def _to_str(self, level, pid, detailed=True):
-            box = self.absbox.cpu().numpy().reshape(-1).tolist()
+            box = self.absbox.cpu().detach().numpy().reshape(-1).tolist()
             out_str = ''
-            if self.is_leaf:
-                # out_str = str(self.get_semantic_id()) + ' ' + str(' '.join(str(i) for i in box)) + '\n' 
-                out_str = str(self.get_semantic_id()) + ' ' + str(' '.join(f"{i:.5f}" for i in box)) + '\n'
-
-            if len(self.children) > 0:
-                for idx, child in enumerate(self.children):
-                    out_str += child._to_str(level+1, idx)
-
-            return out_str
-
-            # out_str = '  |'*(level-1) + '  ├'*(level > 0) + str(pid) + ' ' + self.label + \
-            #         (' [LEAF] ' if self.is_leaf else '    ') + '{' + str(self.part_id) + '}' + \
-            #         ' ' + str(self.get_semantic_id())
-            # if detailed:
-            #     out_str += ' Box('+str(self.absbox)+')\n'
-            # else:
-            #     out_str += '\n'
+            # if self.is_leaf:
+            #     # out_str = str(self.get_semantic_id()) + ' ' + str(' '.join(str(i) for i in box)) + '\n' 
+            #     out_str = str(self.get_semantic_id()) + ' ' + str(' '.join(f"{i:.5f}" for i in box)) + '\n'
 
             # if len(self.children) > 0:
             #     for idx, child in enumerate(self.children):
             #         out_str += child._to_str(level+1, idx)
 
             # return out_str
+
+            out_str = '  |'*(level-1) + '  ├'*(level > 0) + str(pid) + ' ' + self.label + \
+                    (' [LEAF] ' if self.is_leaf else '    ') + '{' + str(self.part_id) + '}' + \
+                    ' ' + str(self.get_semantic_id())
+            if detailed:
+                out_str += ' Box('+str(box)+')\n'
+            else:
+                out_str += '\n'
+
+            if len(self.children) > 0:
+                for idx, child in enumerate(self.children):
+                    out_str += child._to_str(level+1, idx)
+
+            return out_str
         
         def __str__(self):
             return self._to_str(0, 0)

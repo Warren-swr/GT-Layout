@@ -359,20 +359,20 @@ if __name__ == '__main__':
 
     parser = ArgumentParser()
     
-    exp = 'publay-2W'
+    exp = 'publay-12W'
     
     parser.add_argument('--exp_name', type=str, default='./logs/' + exp, help='name of the training run')
     parser.add_argument('--category', type=str, default='magazine', help='object category')
     parser.add_argument('--device', type=str, default='cuda:1', help='cpu or cuda:x for using cuda on GPU number x')
     parser.add_argument('--seed', type=int, default=3124256514, help='random seed (for reproducibility)')
-    parser.add_argument('--data_path', type=str, default='/home/weiran/Projects/RvNN-Layout/data/publay-ours/' + exp)
+    parser.add_argument('--data_path', type=str, default='/home/weiran/Projects/RvNN-Layout/data/publaynet-ours/' + exp)
     parser.add_argument('--train_dataset', type=str, default='train.txt', help='file name for the list of object names for training')
     parser.add_argument('--val_dataset', type=str, default='val.txt', help='file name for the list of object names for validation')
     parser.add_argument('--pretrained_model', type=str, default=None)
 
     # model hyperparameters
-    parser.add_argument('--feature_size', type=int, default=256)
-    parser.add_argument('--hidden_size', type=int, default=256)
+    parser.add_argument('--feature_size', type=int, default=512)
+    parser.add_argument('--hidden_size', type=int, default=512)
     parser.add_argument('--max_tree_depth', type=int, default=8, help='maximum depth of generated object trees')
     parser.add_argument('--max_child_num', type=int, default=5, help='maximum number of children per parent')
 
