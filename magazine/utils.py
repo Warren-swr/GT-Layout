@@ -96,3 +96,82 @@ def get_surface_reweighting_batch(xyz, cube_num_point):
     out = out / (out.sum(dim=1).unsqueeze(dim=1) + 1e-12)
     return out
 
+
+'''
+post process
+'''
+
+def arr_v(node, isRoot=False):
+    total = 0.0
+    if node.children is not None:
+        for child in node.children:
+            total += child.box[0,1] + child.box[0,3]
+        for child in node.children:
+            if isRoot == False or total > 1:
+                child.box[0,1] /= total
+                child.box[0,3] /= total
+        for index, child in enumerate(node.children):
+            if index != 0 and child.box[0,1] < 0.02:
+                child.box[0,3] -= 0.02 - child.box[0,0]
+                child.box[0,1] = 0.02
+
+
+def arr_h(node, isRoot=False):
+    total = 0.0
+    if node.children is not None:
+        for child in node.children:
+            total += child.box[0,0] + child.box[0,2]
+        for child in node.children:
+            if isRoot == False or total > 1:
+                child.box[0,0] /= total
+                child.box[0,2] /= total
+        for index, child in enumerate(node.children):
+            if index != 0 and child.box[0,0] < 0.02:
+                child.box[0,2] -= 0.02 - child.box[0,0]
+                child.box[0,0] = 0.02
+            
+
+def arr_s(node, isRoot=False):
+    if node.children is not None:
+        for child in node.children:
+            total_h = 0.0
+            total_v = 0.0
+            total_h += child.box[0,0] + child.box[0,2]
+            total_v += child.box[0,1] + child.box[0,3]
+            
+            if total_h > 1:
+                child.box[0,0] /= total_h
+                child.box[0,2] /= total_h
+            
+            if total_v > 1:
+                child.box[0,1] /= total_v
+                child.box[0,3] /= total_v
+
+
+def arr_layout(node, isRoot=False):
+    if node.children is not None:
+        if node.label == 'vertical_branch':
+            arr_v(node, isRoot=isRoot)
+        elif node.label == 'horizontal_branch':
+            arr_h(node, isRoot=isRoot)
+        elif node.label == 'stack_branch':
+            arr_s(node, isRoot=isRoot)
+        for index, child in enumerate(node.children):
+            if child.box[0,2]  > 0.95:
+                child.box[0,2] = 1.0
+                child.box[0,0] = 0.0
+            if child.box[0,3] > 0.95:
+                child.box[0,3] = 1.0
+                child.box[0,1] = 0.0
+                
+            if child.box[0,2] + child.box[0,0] > 0.95:
+                child.box[0,2] = 1.0 - child.box[0,0]
+            if child.box[0,3] + child.box[0,1] > 0.95:
+                child.box[0,3] = 1.0 - child.box[0,1]
+            
+            if child.box[0,2] + child.box[0,0] < 0.05:
+                child.box[0,0] = 0.0
+            if child.box[0,3] + child.box[0,1] < 0.05:
+                child.box[0,1] = 0.0
+            
+            arr_layout(child)

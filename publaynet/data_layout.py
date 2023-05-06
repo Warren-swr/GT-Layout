@@ -306,7 +306,7 @@ class Tree(object):
             return self
         
         def _to_str(self, level, pid, detailed=True):
-            box = self.absbox.cpu().numpy().reshape(-1).tolist()
+            box = self.absbox.cpu().detach().numpy().reshape(-1).tolist()
             out_str = ''
             if self.is_leaf:
                 # out_str = str(self.get_semantic_id()) + ' ' + str(' '.join(str(i) for i in box)) + '\n' 
